@@ -1,6 +1,6 @@
 ﻿namespace YNABCompanion
 {
-    using System.Windows;
+    using YNABCompanion.Views.Pages;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -10,6 +10,7 @@
         public MainWindow()
         {
             this.InitializeComponent();
+            this.MainFrame.Navigate(new TransactionsPage());
         }
     }
 }
