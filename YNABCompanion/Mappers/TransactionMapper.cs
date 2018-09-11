@@ -36,7 +36,7 @@
                 }
             }
 
-            return viewModels;
+            return viewModels.OrderBy(vm => vm.Date).ThenByDescending(vm => vm.Value);
         }
 
         public YNABTransaction Map(TransactionViewModel transaction)
