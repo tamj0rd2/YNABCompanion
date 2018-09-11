@@ -38,6 +38,8 @@
 
         public decimal Balance { get; private set; }
 
+        public string Memo { get; set; }
+
         public List<BankTransaction> Transactions { get; }
 
         public void SetBalance(decimal balance)

@@ -39,6 +39,16 @@
             return viewModels;
         }
 
+        public YNABTransaction Map(TransactionViewModel transaction)
+        {
+            return new YNABTransaction
+            {
+                Amount = transaction.Value,
+                Date = transaction.Date.ToString("dd/MM/yyyy"),
+                Memo = transaction.Memo
+            };
+        }
+
         public void MapBalances(IEnumerable<TransactionViewModel> transactions, decimal balance)
         {
             foreach (var transaction in transactions)

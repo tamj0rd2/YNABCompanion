@@ -19,6 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="50"></RowDefinition>
             <RowDefinition Height="6*"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Button Content="Load transaction data" Click="LoadTransactionsClick"></Button>
@@ -54,7 +55,7 @@
                         <GridViewColumn Header="Memo">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Width="200"/>
+                                    <TextBox Width="200" Text="{Binding Memo, Mode=OneWayToSource}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -80,6 +81,8 @@
                 </ListView.View>
             </ListView>
         </Grid>
+
+        <Button Grid.Row="2" Grid.ColumnSpan="4" Content="Export data" Click="ExportTransactionsClick" />
 
         <!--TODO: Group dates and add some background colour to transactions on different dates. They're hard to see right now-->
         <!--TODO: Increase space for the text boxes-->

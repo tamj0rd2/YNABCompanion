@@ -1,9 +1,13 @@
 ﻿namespace YNABCompanion.Views.Pages
 {
+    using CsvHelper;
+    using System;
     using System.IO;
+    using System.Linq;
     using System.Windows;
 
     using YNABCompanion.Mappers;
+    using YNABCompanion.Models;
     using YNABCompanion.ViewModels;
 
     /// <summary>
@@ -41,6 +45,28 @@
 
                 this.viewModel.Transactions.AddRange(transactions);
                 this.TransactionsList.Items.Refresh();
+            }
+        }
+
+        private void ExportTransactionsClick(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                DefaultExt = "*.csv",
+                Filter = "Supported extensions (*.csv)|*.csv",
+                FileName = string.Format("{0} transaction export", DateTime.UtcNow.ToString("dd-MM-yyyy"))
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                var ynabTransactions = this.viewModel.Transactions.Select(t => this.transactionMapper.Map(t));
+
+                using(var streamWriter = new StreamWriter(dialog.FileName))
+                {
+                    var writer = new CsvWriter(streamWriter);
+                    writer.Configuration.Delimiter = ",";
+                    writer.WriteRecords(ynabTransactions);
+                }
             }
         }
 
