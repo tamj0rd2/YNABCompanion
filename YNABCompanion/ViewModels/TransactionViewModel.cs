@@ -8,7 +8,7 @@
     using YNABCompanion.Enums;
     using YNABCompanion.Models;
 
-    public class TransactionViewModel
+    public class TransactionViewModel : BaseViewModel
     {
         public TransactionViewModel(BankTransaction transaction) : this(new List<BankTransaction> { transaction })
         {
@@ -23,7 +23,7 @@
             this.Type = this.Transactions[0].TransactionType;
             this.Value = transactions.Sum(t => t.Value);
         }
-        
+
         public DateTime Date { get; }
 
         public string Reference { get;  }
@@ -45,6 +45,7 @@
         public void SetBalance(decimal balance)
         {
             this.Balance = balance;
+            this.OnPropertyChanged(nameof(this.Balance));
         }
     }
 }

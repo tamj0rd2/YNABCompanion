@@ -38,13 +38,9 @@
 
             if (dialog.ShowDialog() == true)
             {
-                this.viewModel.Transactions.Clear();
-
                 var lines = File.ReadAllLines(dialog.FileName);
                 var transactions = this.transactionMapper.Map(lines, this.viewModel.BankBalance);
-
-                this.viewModel.Transactions.AddRange(transactions);
-                this.TransactionsList.Items.Refresh();
+                this.viewModel.SetTransactions(transactions);
             }
         }
 
@@ -73,7 +69,6 @@
         private void UpdateBalanceClick(object sender, RoutedEventArgs e)
         {
             this.transactionMapper.MapBalances(this.viewModel.Transactions, this.viewModel.BankBalance);
-            this.TransactionsList.Items.Refresh();
         }
     }
 }

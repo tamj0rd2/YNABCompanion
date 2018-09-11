@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="525"
       Title="TransactionsPage" d:DataContext="{d:DesignInstance viewModels:TransactionsPageViewModel}">
-
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -82,7 +82,7 @@
             </ListView>
         </Grid>
 
-        <Button Grid.Row="2" Grid.ColumnSpan="4" Content="Export data" Click="ExportTransactionsClick" />
+        <Button Grid.Row="2" Grid.ColumnSpan="4" Content="Export data" Click="ExportTransactionsClick" IsEnabled="{Binding IsExportButtonEnabled, Mode=OneWay}" />
 
         <!--TODO: Group dates and add some background colour to transactions on different dates. They're hard to see right now-->
         <!--TODO: Increase space for the text boxes-->
