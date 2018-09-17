@@ -58,6 +58,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Enums\TransactionType.cs" />
+    <Compile Include="Services\ITransactionIO.cs" />
+    <Compile Include="Services\TransactionIO.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="Mappers\TransactionMapper.cs" />
     <Compile Include="Mappers\ITransactionMapper.cs" />

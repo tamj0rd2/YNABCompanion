@@ -7,7 +7,7 @@
     using System.Windows;
 
     using YNABCompanion.Mappers;
-    using YNABCompanion.Models;
+    using YNABCompanion.Services;
     using YNABCompanion.ViewModels;
 
     /// <summary>
@@ -17,11 +17,14 @@
     {
         private readonly TransactionsPageViewModel viewModel;
 
-        private readonly TransactionMapper transactionMapper;
+        private readonly ITransactionMapper transactionMapper;
+
+        private readonly ITransactionIO transactionIOService;
 
         public TransactionsPage()
         {
             this.transactionMapper = new TransactionMapper();
+            this.transactionIOService = new TransactionIO();
             this.InitializeComponent();
 
             this.viewModel = new TransactionsPageViewModel();
@@ -38,7 +41,7 @@
 
             if (dialog.ShowDialog() == true)
             {
-                var lines = File.ReadAllLines(dialog.FileName);
+                var lines = this.transactionIOService.ReadLines(dialog.FileName);
                 var transactions = this.transactionMapper.Map(lines, this.viewModel.BankBalance);
                 this.viewModel.SetTransactions(transactions);
             }
@@ -56,13 +59,7 @@
             if (dialog.ShowDialog() == true)
             {
                 var ynabTransactions = this.viewModel.Transactions.Select(t => this.transactionMapper.Map(t));
-
-                using(var streamWriter = new StreamWriter(dialog.FileName))
-                {
-                    var writer = new CsvWriter(streamWriter);
-                    writer.Configuration.Delimiter = ",";
-                    writer.WriteRecords(ynabTransactions);
-                }
+                this.transactionIOService.WriteLines(dialog.FileName, ynabTransactions);
             }
         }
 
