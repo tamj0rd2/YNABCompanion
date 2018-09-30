@@ -12,11 +12,17 @@
 
     public class TransactionMapper : ITransactionMapper
     {
-        private readonly Regex transactionRegex = new Regex("^(?:[^,]+,){4}[^,]+$");
+        private static readonly Regex TransactionRegex = new Regex("^(?:[^,]+,){4}[^,]+$");
+
+        private static string[] OutboundPaymentStatuses = new[] { "Card Purchase" };
+
+        private static string[] InboundPaymentStatuses = new[] { "Inward Payment", "Card Purchase Refund" };
+
+        private static string[] CashWithdrawalStatuses = new[] { "ATM Cash Withdrawal" };
 
         public IEnumerable<TransactionViewModel> Map(IEnumerable<string> lines, decimal balance)
         {
-            var transactionLines = lines.Skip(1).Reverse().Where(t => this.transactionRegex.IsMatch(t)).ToList();
+            var transactionLines = lines.Skip(1).Reverse().Where(t => TransactionRegex.IsMatch(t)).ToList();
             var bankTransactions = transactionLines.Select(Map);
             var viewModels = new List<TransactionViewModel>();
 
@@ -24,7 +30,7 @@
             {
                 foreach (var refGroup in dateGroup.GroupBy(dg => dg.Reference))
                 {
-                    if (refGroup.All(t => t.TransactionType == TransactionType.CardPurchase))
+                    if (refGroup.All(t => t.TransactionType == TransactionType.OutboundPayment))
                     {
                         viewModels.Add(new TransactionViewModel(refGroup.ToList()));
                     }
@@ -73,19 +79,24 @@
 
         private static TransactionType GetTransactionType(string transactionType)
         {
-            switch (transactionType)
+            if (OutboundPaymentStatuses.Contains(transactionType))
             {
-                case "Card Purchase":
-                    return TransactionType.CardPurchase;
-                case "Inward Payment":
-                    return TransactionType.InwardPayment;
-                case "ATM Cash Withdrawal":
-                    return TransactionType.AtmCashWithdrawal;
-                default:
-                    throw new ArgumentOutOfRangeException(
+                return TransactionType.OutboundPayment;
+            }
+
+            if (InboundPaymentStatuses.Contains(transactionType))
+            {
+                return TransactionType.InboundPayment;
+            }
+
+            if (CashWithdrawalStatuses.Contains(transactionType))
+            {
+                return TransactionType.CashWithdrawal;
+            }
+
+            throw new ArgumentOutOfRangeException(
                         nameof(transactionType),
                         Resources.Error_BankTransactionMapper_GetTransactionType_ParsingFailure);
-            }
         }
 
         private static decimal GetValue(string inbound, string outbound)

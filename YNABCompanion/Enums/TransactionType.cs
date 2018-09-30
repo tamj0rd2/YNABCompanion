@@ -4,10 +4,10 @@
     {
         Unknown = 0,
 
-        CardPurchase,
+        OutboundPayment,
 
-        InwardPayment,
+        InboundPayment,
 
-        AtmCashWithdrawal
+        CashWithdrawal
     }
 }
